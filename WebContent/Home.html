@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html  data-ng-app="MainApp">
+<head>
+<meta charset="ISO-8859-1">
+<title>To-Do App</title>
+<script type="text/javascript" src="AngularJS/angular.min.js"></script>
+<script type="text/javascript" src="Controller.js"></script>
+<style>
+/*If done is true change the css for that list element*/
+	span.done-true {
+		color: gray;
+		font-style: italic;
+		text-decoration: line-through;
+	}
+	span[contenteditable="true"]{
+		background: grey;
+		padding: 3px;
+	}
+</style>
+
+</head>
+<body data-ng-controller="app">
+
+	<!-- Header and input field so user can enter a task -->
+	<h1 style="text-align:center;">Add A Task</h1>
+	<input data-ng-model="task" data-ng-keyup="searchEnter()" type="text" style="display:block;margin:0 auto;padding:5px;font-size:15px;width:300px;">
+	
+	<!-- Div with list element that has ng-repeat attribute to loop over and show the tasks -->
+	<div id="tasksToShow">
+		<ul>
+			<!-- angular wont loop over dublicates so we need to add 'track by $index' so it will -->
+			<li data-ng-repeat="singleTask in tasks track by $index">
+				
+				<!-- ng-model for the checkbox will store the true or false value once click done-false will become
+				done-true because its binded to the status property -->
+				<!-- ng-change event attached to checkbox so we can change the tasks status to true or false
+				(meaning complete or incomplete)  -->
+				<input data-ng-change="statusChanged($index)" type="checkbox" data-ng-model="singleTask.status">
+				
+				<!-- each class name is the name of the status (false) so 'done-false' -->
+				<!-- double click event triggers editable area. content editable initially is false -->
+				<!-- keydown needed because would move to next line when enter key is pressed with keyup -->
+				<span data-ng-dblclick="contentEdit($index)" data-ng-model="singleTask.taskMessage" contenteditable="false" 
+				class="done-{{singleTask.status}}" data-ng-keydown="editEnter($index)">	
+					{{ singleTask.taskMessage }}
+				</span>
+			</li>
+		</ul>
+	</div>
+</body>
+</html>
